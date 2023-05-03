@@ -70,7 +70,7 @@ for face_landmarks in face_landmarks_list:
 
     chin_template = Image.open("Kinnschablone.png").convert("RGBA")
     top_to_chin = (y + h) - upper
-    offset = top_to_chin - chin_template.height
+    offset = chin_template.height - top_to_chin
     bordered_image = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
     bordered_image.paste(equalized, (0, 200))
     bordered_template = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
