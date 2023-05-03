@@ -37,6 +37,7 @@ f"Found {len(face_landmarks_list)} face(s) in this photograph.\
 for face_landmarks in face_landmarks_list:
     draw_img = replaced_background.copy()
     for facial_feature in face_landmarks.keys():
+        st.write(facial_feature)
         ImageDraw.Draw(draw_img).line(face_landmarks[facial_feature], width=3)
     st.image(draw_img)
 
