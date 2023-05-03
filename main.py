@@ -45,7 +45,7 @@ for face_landmarks in face_landmarks_list:
     "Based on the facial landmarks,\
      we know how to position the face for a **biometric** photo"
     x, y, w, h = cv2.boundingRect(np.asarray(face_landmarks["chin"]))
-    x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(axis=-1)
+    x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(axis=0)
     aspect_ratio = 35 / 45
     upper = int((y - h) * 0.8)
     lower = int((y + h) * 1.1)
