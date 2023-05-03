@@ -49,7 +49,7 @@ for face_landmarks in face_landmarks_list:
     aspect_ratio = 35 / 45
     upper = int((y - h) * 0.8)
     lower = int((y + h) * 1.1)
-    width = (upper - lower) * aspect_ratio
+    width = (lower - upper) * aspect_ratio
     left = x - width // 2
     right = x + width // 2
     crop_img = replaced_background.crop((left, upper, right, lower))
