@@ -66,8 +66,9 @@ for face_landmarks in face_landmarks_list:
     result_column.image(equalized)
 
     "# Verify"
-    chin_template = Image.open("Kinnschablone.png")
-    eye_template = Image.open("Augenschablone.png")
+    equalized = equalized.convert("RGBA")
+    chin_template = Image.open("Kinnschablone.png").convert("RGBA")
+    eye_template = Image.open("Augenschablone.png").convert("RGBA")
 
     st.image(Image.alpha_composite(equalized, chin_template))
     st.image(Image.alpha_composite(equalized, eye_template))
