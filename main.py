@@ -44,21 +44,35 @@ for face_landmarks in face_landmarks_list:
     "Based on the facial landmarks,\
      we know how to position the face for a **biometric** photo"
     x, y, w, h = cv2.boundingRect(np.asarray(face_landmarks["chin"]))
-    crop_img = replaced_background.crop((
-        int(x - x * 0.1),  # left
-        int((y - h) * 0.8),  # upper
-        int((x + w) + x * 0.1),  # right
-        int((y + h) * 1.1)  # lower
-    ))
+    x_center, y_center = np.asarray(face_landmarks["nose"]).mean(axis=-1)
+    aspect_ratio = 35 / 45
+    upper = int((y - h) * 0.8)
+    lower = int((y + h) * 1.1)
+    width = (upper - lower) * aspect_ratio
+    left = x - width // 2
+    right = x + width // 2
+    crop_img = replaced_background.crop((left, upper, right, lower))
+    crop_img = crop_img.resize((413, 531)) # 35 x 45 mm at 300 DPI
+    crop_img.info["dpi"] = 300
+
     st.image(crop_img)
 
     "## Some (non-ai) color enhancement"
     equalized = Image.fromarray(equalize_this(np.array(crop_img)))
     st.image(equalized)
 
+
+    result_column.image(equalized)
+
+    "# Verify"
+    chin_template = Image.open("Kinnschablone.png")
+    eye_template = Image.open("Augenschablone.png")
+
+    st.image(Image.alpha_composite(equalized, chin_template))
+    st.image(Image.alpha_composite(equalized, eye_template))
+
+
     with st.form("Send to me"):
         email = st.text_input("Enter email to send this picture")
         if st.form_submit_button():
             st.write(email)
-
-    result_column.image(equalized)
