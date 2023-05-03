@@ -67,10 +67,17 @@ for face_landmarks in face_landmarks_list:
 
     "# Verify"
     equalized = equalized.convert("RGBA")
-    chin_template = Image.open("Kinnschablone.png").convert("RGBA")
-    eye_template = Image.open("Augenschablone.png").convert("RGBA")
 
-    st.image(Image.alpha_composite(equalized, chin_template))
+    chin_template = Image.open("Kinnschablone.png").convert("RGBA")
+    top_to_chin = (y + h) - upper
+    offset = top_to_chin - chin_template.height
+    bordered_image = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
+    bordered_image.paste(equalized, (0, 200))
+    bordered_template = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
+    bordered_template.paste(chin_template, (0, offset))
+    st.image(Image.alpha_composite(bordered_image, bordered_template))
+
+    eye_template = Image.open("Augenschablone.png").convert("RGBA")
     st.image(Image.alpha_composite(equalized, eye_template))
 
 
