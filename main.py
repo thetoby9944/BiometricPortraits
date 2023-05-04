@@ -24,7 +24,7 @@ removed_background = remove(img)
 st.image(removed_background)
 
 "## Replace the background"
-color = st.color_picker("Choose background color", value="#5E5E5E")
+color = st.color_picker("Choose background color", value="#EEEEEE")
 color_img = Image.new("RGBA", img.size, color)
 replaced_background = Image.alpha_composite(color_img, removed_background)
 st.image(replaced_background)
@@ -75,12 +75,15 @@ for face_landmarks in face_landmarks_list:
     top_to_chin = (h * 1.2 + h) * resizing_factor
     offset = int(chin_template.height - top_to_chin)
 
-    bordered_image = Image.new('RGBA', (img.width, img.height + 200),
-                               (255, 0, 0, 0))
+    template_size = (413, 531 + 200)
+    transparent = (255, 0, 0, 0)
+
+    bordered_image = Image.new('RGBA', template_size, transparent)
     bordered_image.paste(result_image, (0, 200))
-    bordered_template = Image.new('RGBA', (img.width, img.height + 200),
-                                  (255, 0, 0, 0))
+
+    bordered_template = Image.new('RGBA', template_size, transparent)
     bordered_template.paste(chin_template, (0, offset))
+
     st.image(Image.alpha_composite(bordered_image, bordered_template))
 
     "## Eye position"
