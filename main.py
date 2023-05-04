@@ -65,13 +65,16 @@ with st.spinner("Loading"):
 
             st.image(crop_img)
 
-            "## Some (non-ai) color enhancement"
-            img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
-            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
-            img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
-            equalized = crop_img
-            # Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
-            st.image(equalized)
+            contrast_enhancement = False
+            if contrast_enhancement:
+                "## Some (non-ai) color enhancement"
+                img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
+                img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
+                Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
+                st.image(equalized)
+            else:
+                equalized = crop_img
 
             result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
 
