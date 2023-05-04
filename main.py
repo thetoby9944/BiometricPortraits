@@ -103,14 +103,10 @@ for face_landmarks in face_landmarks_list:
         reference_column.image(Image.open(image_path))
         comparison_column.image(result_image)
 
+    "# Print and Send"
     offsets = (118, 118), (650, 118), (650, 709), (118, 709)
     result_print = Image.open("assets/print.jpeg")
     for offset in offsets:
         result_print.paste(result_image, offset)
     result_print.info["dpi"] = 300
-    st.image(result_print)
-
-    with st.form("Send to me"):
-        email = st.text_input("Enter email to send this picture")
-        if st.form_submit_button():
-            st.write(email)
+    st.image(result_print, use_column_width=False, output_format="png")
