@@ -3,17 +3,17 @@ from io import BytesIO
 from pathlib import Path
 
 import streamlit as st
+st.set_page_config(layout="wide", page_title="Passport Photos")
+
 import numpy as np
 from PIL import Image, ImageDraw
 import face_recognition
 from rembg import remove
 import cv2
 
-from utils import equalize_this
+
 
 "# AI FOR BIOMETRIC PHOTOS"
-
-st.set_page_config(layout="wide", page_title="Passport Photos")
 
 input_column, result_column = st.container()
 
