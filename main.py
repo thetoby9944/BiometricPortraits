@@ -116,7 +116,7 @@ with st.spinner("Loading"):
 
         # Convert PIL image to bytes
         buffered = BytesIO()
-        result_print.save(buffered, format="PNG")
+        result_print.save(buffered, format="PNG", dpi=(300, 300))
         img_bytes = buffered.getvalue()
 
         # Encode bytes as base64 string
