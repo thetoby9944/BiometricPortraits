@@ -22,6 +22,8 @@ with input_column:
 with st.spinner("Loading"):
     with st.sidebar:
         "# Here's how we did it"
+        "Your image"
+        st.image(img)
         "## Let Ai remove the background"
         "We use `u2net` to remove the background for you"
         removed_background = remove(img)
