@@ -17,10 +17,10 @@ img_file_buffer = st.camera_input("Take a photo")
 img = Image.open(img_file_buffer or "face.jpg")
 img_array = np.array(img)
 
-with st.spinner("Loading"):
-    "## Image and Result"
-    result_column = st.container()
+"## Your Passport Photo"
 
+with st.spinner("Loading"):
+    result_column = st.container()
 
     with st.sidebar:
         "# Here's how we did it"
@@ -71,7 +71,7 @@ with st.spinner("Loading"):
 
             result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
 
-        "# Verify head positioning"
+        "## Verify"
         head_column, eye_column = st.columns(2)
 
         result_image = result_image.convert("RGBA")
@@ -99,18 +99,18 @@ with st.spinner("Loading"):
         "Check the example usage of the templates"
         st.image(Image.open("assets/templates/Schablone.png"))
 
-        "## Compare with examples"
+        "## Examples"
         for image_path in Path("assets/references").glob("*.png"):
             reference_column, comparison_column = st.columns([4, 1])
             reference_column.image(Image.open(image_path))
             comparison_column.image(result_image)
 
-        "# Print and Send"
+        # Prepare the result print
         offsets = (118, 118), (650, 118), (650, 709), (118, 709)
         result_print = Image.open("assets/print.jpeg")
         for offset in offsets:
             result_print.paste(result_image, offset)
-        dpi = 300
+        dpi = (300, 300)
         result_print.info["dpi"] = dpi
         result_print.info["DPI"] = dpi
 
@@ -124,8 +124,8 @@ with st.spinner("Loading"):
 
         # Calculate image size in inches
         width, height = result_print.size
-        print_width = width / dpi
-        print_height = height / dpi
+        print_width = width / dpi[0]
+        print_height = height / dpi[1]
 
         # Embed base64 string in HTML img tag
         html = rf'<img src="data:image/png;base64,{img_base64}" style="width: {print_width:.2f}in; height: {print_height:.2f}in;">'
