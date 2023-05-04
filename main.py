@@ -79,7 +79,7 @@ for face_landmarks in face_landmarks_list:
         top_to_chin = (h * 1.2 + h) * resizing_factor
         offset = int(chin_template.height - top_to_chin)
 
-        slide_constant = 100
+        slide_constant = 0
         template_size = (413, 531 + slide_constant)
         transparent = (255, 0, 0, 0)
 
