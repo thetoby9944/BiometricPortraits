@@ -19,53 +19,55 @@ img_array = np.array(img)
 image_column, result_column = st.columns([2, 1])
 image_column.image(img, use_column_width=True)
 
-"# Here's how we did it"
-"## Let Ai remove the background"
-"We use `u2net` to remove the background for you"
-removed_background = remove(img)
-st.image(removed_background)
+with st.sidebar:
+    "# Here's how we did it"
+    "## Let Ai remove the background"
+    "We use `u2net` to remove the background for you"
+    removed_background = remove(img)
+    st.image(removed_background)
 
-"## Replace the background"
-color = st.color_picker("Choose background color", value="#EEEEEE")
-color_img = Image.new("RGBA", img.size, color)
-replaced_background = Image.alpha_composite(color_img, removed_background)
-st.image(replaced_background)
+    "## Replace the background"
+    color = st.color_picker("Choose background color", value="#EEEEEE")
+    color_img = Image.new("RGBA", img.size, color)
+    replaced_background = Image.alpha_composite(color_img, removed_background)
+    st.image(replaced_background)
 
-"## Let Ai find all facial features in the image"
-face_landmarks_list = face_recognition.face_landmarks(img_array)
+    "## Let Ai find all facial features in the image"
+    face_landmarks_list = face_recognition.face_landmarks(img_array)
 
-f"Found {len(face_landmarks_list)} face(s) in this photograph.\
- Let's trace out each facial feature in the image with a line!"
+    f"Found {len(face_landmarks_list)} face(s) in this photograph.\
+     Let's trace out each facial feature in the image with a line!"
 for face_landmarks in face_landmarks_list:
-    draw_img = replaced_background.copy()
-    for facial_feature in face_landmarks.keys():
-        ImageDraw.Draw(draw_img).line(face_landmarks[facial_feature], width=3)
-    st.image(draw_img)
+    with st.sidebar:
+        draw_img = replaced_background.copy()
+        for facial_feature in face_landmarks.keys():
+            ImageDraw.Draw(draw_img).line(face_landmarks[facial_feature], width=3)
+        st.image(draw_img)
 
-    "## Now we crop your image"
-    "Based on the facial landmarks,\
-     we know how to position the face for a **biometric** photo"
-    x, y, w, h = cv2.boundingRect(np.asarray(face_landmarks["chin"]))
-    x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(axis=0)
-    aspect_ratio = 35 / 45
-    upper = int(y - h * 1.2)
-    lower = int(y + h * 1.4)
-    width = (lower - upper) * aspect_ratio
-    left = x_center - width // 2
-    right = x_center + width // 2
-    crop_img = replaced_background.crop((left, upper, right, lower))
+        "## Now we crop your image"
+        "Based on the facial landmarks,\
+         we know how to position the face for a **biometric** photo"
+        x, y, w, h = cv2.boundingRect(np.asarray(face_landmarks["chin"]))
+        x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(axis=0)
+        aspect_ratio = 35 / 45
+        upper = int(y - h * 1.2)
+        lower = int(y + h * 1.4)
+        width = (lower - upper) * aspect_ratio
+        left = x_center - width // 2
+        right = x_center + width // 2
+        crop_img = replaced_background.crop((left, upper, right, lower))
 
-    st.image(crop_img)
+        st.image(crop_img)
 
-    "## Some (non-ai) color enhancement"
-    img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
-    img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
-    equalized = Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
-    st.image(equalized)
+        "## Some (non-ai) color enhancement"
+        img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
+        img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
+        equalized = Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
+        st.image(equalized)
 
-    result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
-    result_column.image(result_image)
+        result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
+        result_column.image(result_image)
 
     "# Verify"
     st.image(Image.open("assets/templates/Schablone.png"))
