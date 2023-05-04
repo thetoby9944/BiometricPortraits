@@ -119,7 +119,7 @@ for face_landmarks in face_landmarks_list:
     img_bytes = buffered.getvalue()
 
     # Encode bytes as base64 string
-    img_base64 = base64.b64encode(img_bytes).decode('ascii')
+    img_base64 = base64.b64encode(img_bytes).decode()
 
     # Calculate image size in inches
     width, height = result_print.size
