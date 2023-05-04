@@ -82,7 +82,7 @@ for face_landmarks in face_landmarks_list:
     bordered_image.paste(result_image, (0, 200))
 
     bordered_template = Image.new('RGBA', template_size, transparent)
-    bordered_template.paste(chin_template, (0, offset + 200))
+    bordered_template.paste(chin_template, (0, 200 - offset))
 
     st.image(Image.alpha_composite(bordered_image, bordered_template))
 
