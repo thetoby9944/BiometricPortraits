@@ -1,16 +1,13 @@
 from io import BytesIO
 from pathlib import Path
-
-import streamlit as st
-st.set_page_config(layout="wide", page_title="Passport Photos")
-
 import numpy as np
 from PIL import Image, ImageDraw
 import face_recognition
 from rembg import remove
 import cv2
+import streamlit as st
 
-
+st.set_page_config(layout="wide", page_title="Passport Photos")
 
 "# AI FOR BIOMETRIC PHOTOS"
 
@@ -25,7 +22,6 @@ with input_column:
     result_column.write("## Your Passport Photo")
 
 with result_column.spinner("Loading"):
-
     with st.sidebar:
         "# Here's how we did it"
         "## Let Ai remove the background"
@@ -36,7 +32,8 @@ with result_column.spinner("Loading"):
         "## Replace the background"
         color = st.color_picker("Choose background color", value="#EEEEEE")
         color_img = Image.new("RGBA", img.size, color)
-        replaced_background = Image.alpha_composite(color_img, removed_background)
+        replaced_background = Image.alpha_composite(color_img,
+                                                    removed_background)
         st.image(replaced_background)
 
         "## Let Ai find all facial features in the image"
@@ -48,14 +45,16 @@ with result_column.spinner("Loading"):
         with st.sidebar:
             draw_img = replaced_background.copy()
             for facial_feature in face_landmarks.keys():
-                ImageDraw.Draw(draw_img).line(face_landmarks[facial_feature], width=3)
+                ImageDraw.Draw(draw_img).line(face_landmarks[facial_feature],
+                                              width=3)
             st.image(draw_img)
 
             "## Now we crop your image"
             "Based on the facial landmarks,\
              we know how to position the face for a **biometric** photo"
             x, y, w, h = cv2.boundingRect(np.asarray(face_landmarks["chin"]))
-            x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(axis=0)
+            x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(
+                axis=0)
             aspect_ratio = 35 / 45
             upper = int(y - h * 1.2)
             lower = int(y + h * 1.4)
@@ -70,7 +69,8 @@ with result_column.spinner("Loading"):
             img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
             clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
             img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
-            equalized = Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
+            equalized = Image.fromarray(
+                cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
             st.image(equalized)
 
             result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
@@ -80,7 +80,8 @@ with result_column.spinner("Loading"):
 
         result_image = result_image.convert("RGBA")
         with head_column:
-            chin_template = Image.open("assets/templates/Kinnschablone.png").convert("RGBA")
+            chin_template = Image.open(
+                "assets/templates/Kinnschablone.png").convert("RGBA")
             resizing_factor = 413 / equalized.width
             top_to_chin = (h * 1.2 + h) * resizing_factor
             offset = int(chin_template.height - top_to_chin)
@@ -97,7 +98,8 @@ with result_column.spinner("Loading"):
 
             st.image(Image.alpha_composite(bordered_image, bordered_template))
         with eye_column:
-            eye_template = Image.open("assets/templates/Augenschablone.png").convert("RGBA")
+            eye_template = Image.open(
+                "assets/templates/Augenschablone.png").convert("RGBA")
             st.image(Image.alpha_composite(result_image, eye_template))
 
         "Check the example usage of the templates"
@@ -124,5 +126,7 @@ with result_column.spinner("Loading"):
         img_bytes = buffered.getvalue()
 
         result_column.image(result_print)
-        result_column.download_button('Download for printing and mailing', data=img_bytes,
-                           file_name='passport.png', mime='image/png')
+        result_column.download_button('Download for printing and mailing',
+                                      data=img_bytes,
+                                      file_name='passport.png',
+                                      mime='image/png')
