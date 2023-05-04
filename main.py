@@ -127,5 +127,5 @@ for face_landmarks in face_landmarks_list:
     print_height = height / dpi
 
     # Embed base64 string in HTML img tag
-    html = f'<img src="data:image/png;base64,{img_base64}" width="{print_width:.2f}in" height="{print_height:.2f}in">'
+    html = f'<img src="data:image/png;base64,{img_base64}" width="{print_width:.2f}in" height="{print_height:.2f}in" style="image-rendering: pixelated;>'
     result_column.markdown(html, unsafe_allow_html=True)
