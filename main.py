@@ -70,30 +70,33 @@ for face_landmarks in face_landmarks_list:
         result_column.image(result_image)
 
     "# Verify"
-    st.image(Image.open("assets/templates/Schablone.png"))
+    head_column, eye_column = st.columns(2)
 
     result_image = result_image.convert("RGBA")
+    with head_column:
+        "## Head position"
+        chin_template = Image.open("assets/templates/Kinnschablone.png").convert("RGBA")
+        resizing_factor = 413 / equalized.width
+        top_to_chin = (h * 1.2 + h) * resizing_factor
+        offset = int(chin_template.height - top_to_chin)
 
-    "## Head position"
-    chin_template = Image.open("assets/templates/Kinnschablone.png").convert("RGBA")
-    resizing_factor = 413 / equalized.width
-    top_to_chin = (h * 1.2 + h) * resizing_factor
-    offset = int(chin_template.height - top_to_chin)
+        template_size = (413, 531 + 200)
+        transparent = (255, 0, 0, 0)
 
-    template_size = (413, 531 + 200)
-    transparent = (255, 0, 0, 0)
+        bordered_image = Image.new('RGBA', template_size, transparent)
+        bordered_image.paste(result_image, (0, 200))
 
-    bordered_image = Image.new('RGBA', template_size, transparent)
-    bordered_image.paste(result_image, (0, 200))
+        bordered_template = Image.new('RGBA', template_size, transparent)
+        bordered_template.paste(chin_template, (0, 200 - offset))
 
-    bordered_template = Image.new('RGBA', template_size, transparent)
-    bordered_template.paste(chin_template, (0, 200 - offset))
+        st.image(Image.alpha_composite(bordered_image, bordered_template))
+    with eye_column:
+        "## Eye position"
+        eye_template = Image.open("assets/templates/Augenschablone.png").convert("RGBA")
+        st.image(Image.alpha_composite(result_image, eye_template))
 
-    st.image(Image.alpha_composite(bordered_image, bordered_template))
+    st.image(Image.open("assets/templates/Schablone.png"))
 
-    "## Eye position"
-    eye_template = Image.open("assets/templates/Augenschablone.png").convert("RGBA")
-    st.image(Image.alpha_composite(result_image, eye_template))
 
     for image_path in Path("assets/references").glob("*.png"):
         reference_column, comparison_column = st.columns([4, 1])
