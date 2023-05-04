@@ -69,7 +69,7 @@ for face_landmarks in face_landmarks_list:
         result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
         result_column.image(result_image)
 
-    "# Verify"
+    "# Verify head positioning"
     head_column, eye_column = st.columns(2)
 
     result_image = result_image.convert("RGBA")
@@ -97,7 +97,7 @@ for face_landmarks in face_landmarks_list:
     "Check the example usage of the templates"
     st.image(Image.open("assets/templates/Schablone.png"))
 
-
+    "## Compare with examples"
     for image_path in Path("assets/references").glob("*.png"):
         reference_column, comparison_column = st.columns([4, 1])
         reference_column.image(Image.open(image_path))
