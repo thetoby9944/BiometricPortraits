@@ -1,4 +1,3 @@
-import base64
 from io import BytesIO
 from pathlib import Path
 
@@ -15,7 +14,7 @@ import cv2
 
 "# AI FOR BIOMETRIC PHOTOS"
 
-input_column, result_column = st.container()
+input_column, result_column = st.columns(2)
 
 with input_column:
     img_file_buffer = st.camera_input("Take a photo")
