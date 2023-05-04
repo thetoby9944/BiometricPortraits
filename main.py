@@ -12,15 +12,20 @@ import cv2
 from utils import equalize_this
 
 "# AI FOR BIOMETRIC PHOTOS"
-img_file_buffer = st.camera_input("Take a photo")
 
-img = Image.open(img_file_buffer or "face.jpg")
-img_array = np.array(img)
+st.set_page_config(layout="wide", page_title="Passport Photos")
 
-"## Your Passport Photo"
+input_column, result_column = st.container()
 
-with st.spinner("Loading"):
-    result_column = st.container()
+with input_column:
+    img_file_buffer = st.camera_input("Take a photo")
+
+    img = Image.open(img_file_buffer or "face.jpg")
+    img_array = np.array(img)
+
+    result_column.write("## Your Passport Photo")
+
+with result_column.spinner("Loading"):
 
     with st.sidebar:
         "# Here's how we did it"
@@ -72,7 +77,7 @@ with st.spinner("Loading"):
             result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
 
         "## Verify"
-        head_column, eye_column = st.columns(2)
+        head_column, eye_column, explanation_column = st.columns(3)
 
         result_image = result_image.convert("RGBA")
         with head_column:
@@ -97,7 +102,7 @@ with st.spinner("Loading"):
             st.image(Image.alpha_composite(result_image, eye_template))
 
         "Check the example usage of the templates"
-        st.image(Image.open("assets/templates/Schablone.png"))
+        explanation_column.image(Image.open("assets/templates/Schablone.png"))
 
         "## Examples"
         for image_path in Path("assets/references").glob("*.png"):
