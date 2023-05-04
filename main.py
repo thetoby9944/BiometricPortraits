@@ -30,7 +30,7 @@ with st.spinner("Loading"):
         st.image(removed_background)
 
         "## Replace the background"
-        color = st.color_picker("Choose background color", value="#EEEEEE")
+        color = st.color_picker("Choose background color", value="#AEAEAE")
         color_img = Image.new("RGBA", img.size, color)
         replaced_background = Image.alpha_composite(color_img,
                                                     removed_background)
