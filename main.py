@@ -11,7 +11,7 @@ st.set_page_config(layout="wide", page_title="Passport Photos")
 
 "# AI FOR BIOMETRIC PHOTOS"
 
-input_column, result_column = st.columns(2)
+input_column, result_column = st.columns([2, 1])
 
 with input_column:
     img_file_buffer = st.camera_input("Take a photo")
@@ -21,7 +21,8 @@ with input_column:
 
     result_column.write("## Your Passport Photo")
 
-with result_column.spinner("Loading"):
+with result_column:
+    st.spinner("Loading")
     with st.sidebar:
         "# Here's how we did it"
         "## Let Ai remove the background"
