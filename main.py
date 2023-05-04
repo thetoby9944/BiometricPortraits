@@ -65,7 +65,6 @@ for face_landmarks in face_landmarks_list:
     st.image(equalized)
 
     result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
-    result_image.info["dpi"] = 300
     result_column.image(result_image)
 
     "# Verify"
@@ -103,6 +102,7 @@ for face_landmarks in face_landmarks_list:
     result_print = Image.open("assets/print.jpeg")
     for offset in offsets:
         result_print.paste(result_image, offset)
+    result_print.info["dpi"] = 300
     st.image(result_print)
 
     with st.form("Send to me"):
