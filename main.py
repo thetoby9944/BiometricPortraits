@@ -100,7 +100,6 @@ with st.spinner("Loading"):
                 "assets/templates/Augenschablone.png").convert("RGBA")
             st.image(Image.alpha_composite(result_image, eye_template))
 
-        "Check the example usage of the templates"
         explanation_column.image(Image.open("assets/templates/Schablone.png"))
 
         "## Examples"
