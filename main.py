@@ -19,8 +19,6 @@ with input_column:
     img = Image.open(img_file_buffer or "face.jpg")
     img_array = np.array(img)
 
-    result_column.write("## Your Passport Photo")
-
 with st.spinner("Loading"):
     with st.sidebar:
         "# Here's how we did it"
