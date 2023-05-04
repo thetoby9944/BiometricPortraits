@@ -119,17 +119,6 @@ with st.spinner("Loading"):
         result_print.save(buffered, format="PNG", dpi=(300, 300))
         img_bytes = buffered.getvalue()
 
-        # Encode bytes as base64 string
-        img_base64 = base64.b64encode(img_bytes).decode()
-
-        # Calculate image size in inches
-        width, height = result_print.size
-        print_width = width / dpi[0]
-        print_height = height / dpi[1]
-
-        # Embed base64 string in HTML img tag
-        html = rf'<img src="data:image/png;base64,{img_base64}" style="image-resolution: 300dpi;">'
-        result_column.markdown(html, unsafe_allow_html=True)
-
+        result_column.image(result_print)
         result_column.download_button('Download for printing and mailing', data=img_bytes,
                            file_name='passport.png', mime='image/png')
