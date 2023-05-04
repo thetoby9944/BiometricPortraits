@@ -21,8 +21,7 @@ with input_column:
 
     result_column.write("## Your Passport Photo")
 
-with result_column:
-    st.spinner("Loading")
+with st.spinner("Loading"):
     with st.sidebar:
         "# Here's how we did it"
         "## Let Ai remove the background"
