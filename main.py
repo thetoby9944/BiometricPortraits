@@ -76,7 +76,7 @@ with st.spinner("Loading"):
             result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
 
         "## Verify"
-        head_column, eye_column, explanation_column = st.columns(3)
+        head_column, eye_column, explanation_column = st.columns([1,1,2])
 
         result_image = result_image.convert("RGBA")
         with head_column:
