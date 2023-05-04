@@ -130,3 +130,6 @@ with st.spinner("Loading"):
         # Embed base64 string in HTML img tag
         html = rf'<img src="data:image/png;base64,{img_base64}" style="width: {print_width:.2f}in; height: {print_height:.2f}in; image-resolution: 300dpi;">'
         result_column.markdown(html, unsafe_allow_html=True)
+
+        result_column.download_button('Download Image', data=img_base64,
+                           file_name='passport.png', mime='image/png')
