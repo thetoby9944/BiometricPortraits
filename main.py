@@ -109,8 +109,9 @@ for face_landmarks in face_landmarks_list:
     result_print = Image.open("assets/print.jpeg")
     for offset in offsets:
         result_print.paste(result_image, offset)
-    result_print.info["dpi"] = 300
-    result_print.info["DPI"] = 300
+    dpi = 300
+    result_print.info["dpi"] = dpi
+    result_print.info["DPI"] = dpi
 
     # Convert PIL image to bytes
     buffered = BytesIO()
@@ -120,6 +121,11 @@ for face_landmarks in face_landmarks_list:
     # Encode bytes as base64 string
     img_base64 = base64.b64encode(img_bytes).decode('ascii')
 
+    # Calculate image size in inches
+    width, height = result_print.size
+    print_width = width / dpi
+    print_height = height / dpi
+
     # Embed base64 string in HTML img tag
-    html = f'<img src="data:image/png;base64,{img_base64}">'
+    html = f'<img src="data:image/png;base64,{img_base64}" width="{print_width:.2f}in" height="{print_height:.2f}in">'
     result_column.markdown(html, unsafe_allow_html=True)
