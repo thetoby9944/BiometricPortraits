@@ -53,21 +53,17 @@ for face_landmarks in face_landmarks_list:
     left = x_center - width // 2
     right = x_center + width // 2
     crop_img = replaced_background.crop((left, upper, right, lower))
-    crop_img = crop_img.resize((413, 531)) # 35 x 45 mm at 300 DPI
 
     st.image(crop_img)
 
     "## Some (non-ai) color enhancement"
     equalized = Image.fromarray(equalize_this(np.array(crop_img)))
-    equalized.info["dpi"] = 300
     st.image(equalized)
-    result_column.image(equalized)
 
     "# Verify"
     equalized = equalized.convert("RGBA")
     "## Head position"
     chin_template = Image.open("Kinnschablone.png").convert("RGBA")
-    height = lower - upper
     top_to_chin = int(h * 1.2 + h)
     offset = chin_template.height - top_to_chin
     bordered_image = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
@@ -79,6 +75,11 @@ for face_landmarks in face_landmarks_list:
     "## Eye position"
     eye_template = Image.open("Augenschablone.png").convert("RGBA")
     st.image(Image.alpha_composite(equalized, eye_template))
+
+
+    result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
+    result_image.info["dpi"] = 300
+    result_column.image(result_image)
 
 
     with st.form("Send to me"):
