@@ -80,14 +80,15 @@ for face_landmarks in face_landmarks_list:
         top_to_chin = (h * 1.2 + h) * resizing_factor
         offset = int(chin_template.height - top_to_chin)
 
-        template_size = (413, 531 + 200)
+        slide_constant = 100
+        template_size = (413, 531 + slide_constant)
         transparent = (255, 0, 0, 0)
 
         bordered_image = Image.new('RGBA', template_size, transparent)
-        bordered_image.paste(result_image, (0, 200))
+        bordered_image.paste(result_image, (0, slide_constant))
 
         bordered_template = Image.new('RGBA', template_size, transparent)
-        bordered_template.paste(chin_template, (0, 200 - offset))
+        bordered_template.paste(chin_template, (0, slide_constant - offset))
 
         st.image(Image.alpha_composite(bordered_image, bordered_template))
     with eye_column:
