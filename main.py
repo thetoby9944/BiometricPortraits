@@ -57,8 +57,15 @@ for face_landmarks in face_landmarks_list:
     st.image(crop_img)
 
     "## Some (non-ai) color enhancement"
-    equalized = Image.fromarray(equalize_this(np.array(crop_img)))
+    img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
+    img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
+    equalized = Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
     st.image(equalized)
+
+    result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
+    result_image.info["dpi"] = 300
+    result_column.image(result_image)
 
     "# Verify"
     equalized = equalized.convert("RGBA")
@@ -77,9 +84,6 @@ for face_landmarks in face_landmarks_list:
     st.image(Image.alpha_composite(equalized, eye_template))
 
 
-    result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
-    result_image.info["dpi"] = 300
-    result_column.image(result_image)
 
 
     with st.form("Send to me"):
