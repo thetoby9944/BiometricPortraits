@@ -1,3 +1,5 @@
+import base64
+from io import BytesIO
 from pathlib import Path
 
 import streamlit as st
@@ -110,4 +112,14 @@ for face_landmarks in face_landmarks_list:
     result_print.info["dpi"] = 300
     result_print.info["DPI"] = 300
 
-    result_column.pyplot(result_print, dpi=300)
+    # Convert PIL image to bytes
+    buffered = BytesIO()
+    result_print.save(buffered, format="PNG")
+    img_bytes = buffered.getvalue()
+
+    # Encode bytes as base64 string
+    img_base64 = base64.b64encode(img_bytes).decode('ascii')
+
+    # Embed base64 string in HTML img tag
+    html = f'<img src="data:image/png;base64,{img_base64}">'
+    result_column.markdown(html, unsafe_allow_html=True)
