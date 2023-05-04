@@ -74,7 +74,6 @@ for face_landmarks in face_landmarks_list:
 
     result_image = result_image.convert("RGBA")
     with head_column:
-        "## Head position"
         chin_template = Image.open("assets/templates/Kinnschablone.png").convert("RGBA")
         resizing_factor = 413 / equalized.width
         top_to_chin = (h * 1.2 + h) * resizing_factor
