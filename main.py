@@ -69,8 +69,8 @@ with st.spinner("Loading"):
             img_yuv = cv2.cvtColor(np.array(crop_img), cv2.COLOR_RGB2YCrCb)
             clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2, 2))
             img_yuv[:, :, 0] = clahe.apply(img_yuv[:, :, 0])
-            equalized = Image.fromarray(
-                cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
+            equalized = crop_img
+            # Image.fromarray(cv2.cvtColor(img_yuv, cv2.COLOR_YCrCb2RGB))
             st.image(equalized)
 
             result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
@@ -105,9 +105,9 @@ with st.spinner("Loading"):
         explanation_column.image(Image.open("assets/templates/Schablone.png"))
 
         "## Examples"
-        for image_path in Path("assets/references").glob("*.png"):
+        for reference_image_path in Path("assets/references").glob("*.png"):
             reference_column, comparison_column = st.columns([4, 1])
-            reference_column.image(Image.open(image_path))
+            reference_column.image(Image.open(reference_image_path))
             comparison_column.image(result_image)
 
         # Prepare the result print
