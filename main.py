@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import streamlit as st
 import numpy as np
 from PIL import Image, ImageDraw
@@ -8,7 +10,7 @@ import cv2
 from utils import equalize_this
 
 "# AI FOR BIOMETRIC PHOTOS"
-img_file_buffer = st.camera_input("")
+img_file_buffer = st.camera_input("Take a photo")
 
 img = Image.open(img_file_buffer or "face.jpg")
 img_array = np.array(img)
@@ -37,7 +39,6 @@ f"Found {len(face_landmarks_list)} face(s) in this photograph.\
 for face_landmarks in face_landmarks_list:
     draw_img = replaced_background.copy()
     for facial_feature in face_landmarks.keys():
-        st.write(facial_feature)
         ImageDraw.Draw(draw_img).line(face_landmarks[facial_feature], width=3)
     st.image(draw_img)
 
@@ -68,10 +69,12 @@ for face_landmarks in face_landmarks_list:
     result_column.image(result_image)
 
     "# Verify"
+    st.image(Image.open("assets/templates/Schablone.png"))
+
     result_image = result_image.convert("RGBA")
 
     "## Head position"
-    chin_template = Image.open("Kinnschablone.png").convert("RGBA")
+    chin_template = Image.open("assets/templates/Kinnschablone.png").convert("RGBA")
     resizing_factor = 413 / equalized.width
     top_to_chin = (h * 1.2 + h) * resizing_factor
     offset = int(chin_template.height - top_to_chin)
@@ -88,8 +91,13 @@ for face_landmarks in face_landmarks_list:
     st.image(Image.alpha_composite(bordered_image, bordered_template))
 
     "## Eye position"
-    eye_template = Image.open("Augenschablone.png").convert("RGBA")
+    eye_template = Image.open("assets/templates/Augenschablone.png").convert("RGBA")
     st.image(Image.alpha_composite(result_image, eye_template))
+
+    for image_path in Path("assets/references").glob("*.png"):
+        reference_column, comparison_column = st.columns([4, 1])
+        reference_column.image(Image.open(image_path))
+        comparison_column.image(result_image)
 
     with st.form("Send to me"):
         email = st.text_input("Enter email to send this picture")
