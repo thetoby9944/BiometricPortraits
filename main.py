@@ -128,7 +128,7 @@ with st.spinner("Loading"):
         print_height = height / dpi[1]
 
         # Embed base64 string in HTML img tag
-        html = rf'<img src="data:image/png;base64,{img_base64}">'
+        html = rf'<img src="data:image/png;base64,{img_base64}" style="image-resolution: 300dpi;">'
         result_column.markdown(html, unsafe_allow_html=True)
 
         result_column.download_button('Download for printing and mailing', data=img_bytes,
