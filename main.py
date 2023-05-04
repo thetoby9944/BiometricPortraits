@@ -68,23 +68,24 @@ for face_landmarks in face_landmarks_list:
     result_column.image(result_image)
 
     "# Verify"
-    equalized = equalized.convert("RGBA")
+    result_image = result_image.convert("RGBA")
     "## Head position"
     chin_template = Image.open("Kinnschablone.png").convert("RGBA")
-    top_to_chin = int(h * 1.2 + h)
-    offset = chin_template.height - top_to_chin
-    bordered_image = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
-    bordered_image.paste(equalized, (0, 200))
-    bordered_template = Image.new('RGBA', (img.width, img.height + 200), (255, 0, 0, 0))
+    resizing_factor = 413 / equalized.width
+    top_to_chin = (h * 1.2 + h) * resizing_factor
+    offset = int(chin_template.height - top_to_chin)
+
+    bordered_image = Image.new('RGBA', (img.width, img.height + 200),
+                               (255, 0, 0, 0))
+    bordered_image.paste(result_image, (0, 200))
+    bordered_template = Image.new('RGBA', (img.width, img.height + 200),
+                                  (255, 0, 0, 0))
     bordered_template.paste(chin_template, (0, offset))
     st.image(Image.alpha_composite(bordered_image, bordered_template))
 
     "## Eye position"
     eye_template = Image.open("Augenschablone.png").convert("RGBA")
-    st.image(Image.alpha_composite(equalized, eye_template))
-
-
-
+    st.image(Image.alpha_composite(result_image, eye_template))
 
     with st.form("Send to me"):
         email = st.text_input("Enter email to send this picture")
