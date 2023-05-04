@@ -110,4 +110,4 @@ for face_landmarks in face_landmarks_list:
         result_print.paste(result_image, offset)
     result_print.info["dpi"] = 300
     result_print.info["DPI"] = 300
-    st.image(result_print, use_column_width=False, output_format="PNG")
+    st.pyplot(result_print, dpi=300)
