@@ -16,8 +16,8 @@ img = Image.open(img_file_buffer or "face.jpg")
 img_array = np.array(img)
 
 "## Image and Result"
-image_column, result_column = st.columns([2, 1])
-image_column.image(img, use_column_width=True)
+result_column = st.container()
+
 
 with st.sidebar:
     "# Here's how we did it"
@@ -67,7 +67,6 @@ for face_landmarks in face_landmarks_list:
         st.image(equalized)
 
         result_image = equalized.resize((413, 531))  # 35 x 45 mm at 300 DPI
-        result_column.image(result_image)
 
     "# Verify head positioning"
     head_column, eye_column = st.columns(2)
@@ -110,4 +109,5 @@ for face_landmarks in face_landmarks_list:
         result_print.paste(result_image, offset)
     result_print.info["dpi"] = 300
     result_print.info["DPI"] = 300
-    st.pyplot(result_print, dpi=300)
+
+    result_column.pyplot(result_print, dpi=300)
