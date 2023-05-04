@@ -47,8 +47,8 @@ for face_landmarks in face_landmarks_list:
     x, y, w, h = cv2.boundingRect(np.asarray(face_landmarks["chin"]))
     x_center, y_center = np.asarray(face_landmarks["nose_bridge"]).mean(axis=0)
     aspect_ratio = 35 / 45
-    upper = int(y - h * 1.3)
-    lower = int(y + h * 1.3)
+    upper = int(y - h * 1.2)
+    lower = int(y + h * 1.4)
     width = (lower - upper) * aspect_ratio
     left = x_center - width // 2
     right = x_center + width // 2
