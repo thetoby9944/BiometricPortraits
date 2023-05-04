@@ -92,7 +92,8 @@ for face_landmarks in face_landmarks_list:
 
         st.image(Image.alpha_composite(bordered_image, bordered_template))
     with eye_column:
-        "## Eye position"
+        "## "
+        "## "
         eye_template = Image.open("assets/templates/Augenschablone.png").convert("RGBA")
         st.image(Image.alpha_composite(result_image, eye_template))
 
