@@ -116,7 +116,7 @@ with st.spinner("Loading"):
 
         # Prepare the result print
         offsets = (118, 118), (650, 118), (650, 709), (118, 709)
-        result_print = Image.open("assets/print.jpeg")
+        result_print = Image.open("assets/print.png")
         for offset in offsets:
             result_print.paste(result_image, offset)
         dpi = (300, 300)
