@@ -42,6 +42,7 @@ with st.spinner("Loading"):
         f"Found {len(face_landmarks_list)} face(s) in this photograph.\
          Let's trace out each facial feature in the image with a line!"
     for face_landmarks in face_landmarks_list:
+
         with st.sidebar:
             draw_img = replaced_background.copy()
             for facial_feature in face_landmarks.keys():
